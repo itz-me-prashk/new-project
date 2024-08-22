@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Notes-Maker</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='lightmode.css')}}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/642b2c4377.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <nav>
+            <li></li>
+            <li>
+                <div class="search">
+                    <i class="fa-solid fa-magnifying-glass" id="w1sp" style="color: white;"></i>
+                    <input type="text" name="search" class="searchbar" placeholder="Search" onkeyup="search(event)" > 
+                </div>
+            </li>
+            <li class="gear">
+                <div class="dropdown">
+                      <button onclick="myFunction()" class="dropbtn">
+                          <i class="fa-solid fa-gear" id="gear" ></i>
+                      </button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <table>
+                                <td>
+                                    <tr>
+                                        <a style="cursor: pointer;" onclick="darklight()">
+                                            <i class="fa-solid fa-moon" style="margin-right:10px ;"></i> Dark Mode
+                                        </a>
+                                    </tr> 
+                                </td>
+                                <td>
+                                    <tr>
+                                        <a onclick="popup2() " style="cursor: pointer;" >
+                                           <i class="fa-solid fa-user" style="margin-right:10px ; "></i> Acount Info 
+                                        </a>
+                                    </tr>
+                                </td>
+                                <td>
+                                    <tr>
+                                         <a href="{{url_for('logouts')}}" class="logout">
+                                            <i class="fa-solid fa-right-from-bracket" style="margin-right:10px ;"></i>Logout
+                                        </a>
+                                    </tr>
+                                </td>
+                            </table>
+                        </div>
+                </div>
+            </li>
+        </nav>
+        <sidebar class='sidebar'>
+            <div class="userdetails"> 
+                <img src="static/DP1.png" style="width:50px; height: 50px;" class="img1" onclick="popup2()"> 
+                <li class="dt"> 
+                    <p>{{result.USERNAME}}</p> 
+                    <p>{{result.GMAIL}}</p>
+                    
+                </li> 
+            </div>
+            <div class="icons">
+                <li class="i1" onclick="func1()"> <i class="fa-solid fa-note-sticky"></i> <p>Notes</p> </li>
+                <li class="i2" onclick="func2()"> <i class="fa-solid fa-bell"></i> <p>Remainder</p> </li> 
+                <li class="i5" id="new" onclick="func5()"> <i class="fa-solid fa-plus"></i> </i> <p >New</p> </li> 
+                <li class="i3" onclick="func3()"> <i class="fa-solid fa-box-archive"></i> <p>Archeive</p> </li>
+                <li class="i4" onclick="func4()"> <i class="fa-solid fa-trash"></i> <p>Trash</p> </li>
+                <span class="x" onclick="move()"> <i class="fa-solid fa-left-long"></i> </span>
+                <span class="x1" onclick="none()"> <i class="fa-solid fa-right-long"></i> </span>
+            </div>
+        </sidebar> 
+        <aside class="userpopup">
+            <p style="display:inline;" class="xmark" onclick="popup2close()"> <i class="fa-solid fa-right-from-bracket"></i></p>
+            <center>
+                <img src="static/DP1.png" style="width:105px; height: 105px;" class="img1" alt="userimage"> 
+                <p>{{result.USERNAME}}</p>
+                <p>{{result.GMAIL}}</p>
+                <button style="margin-top:10px; color:blue;" class="change-pass">Change Password</button>
+                <br>
+                <button style="margin-top:10px; color:green;" class="create-acc">Create New Account</button>
+                <br>
+                <a href="{{url_for('logouts')}}"><button style="margin-top:10px; color: red;" class="loggout"> Logout</button></a>
+            </center>
+        </aside> 
+        <main id="container">
+
+            <!-- <div class="folder">
+            </div> -->
+            
+            {% for ic in datas %}
+                {% if ic.NUMBER==0 or ic.NUMBER==3%}
+                    <div class="text121" >
+                      
+                        <td>
+                            <tr>
+                                <h2 class="headings">
+                                     {{ic.TITLE}}
+                                </h2>
+                            </tr>
+                        </td>
+                        <td>
+                            <tr>
+                                <p class="text-contents-p">
+                                    {{ic.CONTENT}}
+                                
+                                </p>
+                                <!-- <center>
+                                    <img src="{{ic.image}}" alt="none" style="width:105px; height:105px;" class="img12">
+                                </center> -->
+                                <p style="display: none;">{{ic.ID}}</p>
+                            </tr>
+                            <div style="display:flex; flex-direction: row ; justify-content: space-between;">
+                                <p style=" color: grey;"> | {{ic.CREATED}} | </p>
+                                
+                                <input type="checkbox" name="" class="checkbox" onclick ="dellselected(event)">
+                                
+                            </div>
+                        </td>
+                        <center>
+                        <td >
+                            <tr >
+                                <div style="display:flex; justify-content: space-around;" class="altopt" >
+                                    <div>
+                                        <!-- <input type="file" id="fileInput" style="display: none;"  accept="image/*">
+                                        <button id="imginp" type="file" >  <i class="fa-solid fa-image" ></i> </button> -->
+                                        <a href="{{url_for('move_to_archive',id=ic.ID)}}">
+                                            <button class="archbtn"> <i class="fa-solid fa-box-archive"></i> </button>
+                                        </a>
+
+                                        <a href="{{url_for('move_to_trash',id=ic.ID)}}">
+                                            <button class="trashbtn"> <i class="fa-solid fa-trash"></i> </button>
+                                        </a>
+                                        <a href="{{url_for('add_remainder',id=ic.ID)}}">
+                                            <button class="trashbtn"> <i class="fa-solid fa-bell"></i> </button>
+                                        </a>
+                                        
+                                    </div>
+                                    <a href=""></a>
+                                    <button class="max" onclick="max(event)"> <i class="fa-solid fa-expand"></i> </button>
+                                        
+                                    
+                                </div>
+                            </tr>
+                        </td>
+                        </center>
+                    </div> 
+                {% endif %}
+            {% endfor %}
+        </main>
+        <main class="archive" style="display:none;">
+            {% for ic1 in datas %}
+                {% if ic1.NUMBER==1 %}
+                    <div class="text121"  >
+                          
+                            <td>
+                                <tr>
+                                    <h2 class="headings">
+                                       {{ic1.TITLE}}
+                                    </h2>
+                                </tr>
+                            </td>
+                            <td>
+                                <tr>
+                                    <p>
+                                      {{ic1.CONTENT}}
+                                    </p>
+                                    <p style="display: none;">{{ic1.ID}}</p>
+                                </tr>
+                                <div style="display:flex; flex-direction: row ; justify-content: space-between;">
+                                    <p style=" color: grey;"> | {{ic1.CREATED}} | </p>
+                                    
+                                    <input type="checkbox" name="" class="checkbox">
+                                    
+                                </div>
+                            </td>
+                            
+                            <center>
+                            <td >
+                                <tr >
+                                    <div style="display:flex; justify-content: space-around;" class="altopt">
+                                        <a href="{{url_for('restore',id=ic1.ID)}}">
+                                            <button><i class="fa-solid fa-window-restore" ></i></button>
+                                        </a>
+                                    </div>
+                                </tr>
+                            </td>
+                            </center>
+                        </div>
+                        
+                {% endif %}
+            {% endfor %}
+        </main>
+
+
+        <main class="archiveopt2" style="align-items: center; justify-content: center; display: none;">
+            <p> Archieved Items Will Appear Here </p>
+            <p style="opacity: 0.7;"> <i class="fa-solid fa-box-archive" style="width:70px; height: 70px;"></i> </p>
+        </main>
+
+        <!-- <div class="confirm-delete" style="z-index:47; background-color:grey; display: none ; align-items: center; justify-content: center; width:100%; height: 100%; position: fixed; opacity: 0.8;">
+                <div class="options" >
+                    <h2>Do You Want To Delete The Note Permanent</h2>
+                    <h3>This Action Cannot Be Undone </h3>
+                    <div class="confirm-delete-buttons">
+                        <button>Cancel</button>
+                        <button>Delete</button>
+                    </div>
+                </div>
+            </div> -->
+        <main class="trash" style="display:none;">
+            
+            {% for ic2 in datas %}
+                {% if ic2.NUMBER==2 %}
+                    <div class="text121"  > 
+                            <td>
+                                <tr>
+                                    <h2 class="headings">
+                                        {{ic2.TITLE}}
+                                    </h2>
+                                </tr>
+                            </td>
+                            <td>
+                                <tr>
+                                    <p>
+                                        {{ic2.CONTENT}}
+
+                                    </p>
+                                    <p style="display: none;">{{ic2.ID}}</p>
+                                </tr>
+                                <div style="display:flex; flex-direction: row ; justify-content: space-between;">
+                                    <p style=" color: grey;"> | {{ic2.CREATED}} | </p>
+                                    
+                                    <input type="checkbox" name="" class="checkbox">
+                                    
+                                </div>
+                            </td>
+                            <center>
+                            <td >
+                                <tr >
+                                    <div style="display:flex; justify-content: space-around;" class="altopt">
+                                        <a href="{{url_for('restore',id=ic2.ID)}}">
+                                            <button><i class="fa-solid fa-window-restore"></i></button>
+                                        </a>
+                                        <a href="{{url_for('delete',id=ic2.ID)}}">
+                                            <button ><i class="fa-solid fa-trash"></i></button>
+                                        </a>
+                                    </div>
+                                </tr>
+                            </td>
+                            </center>
+                        </div>
+                {%else%}
+
+                {% endif %}
+            {% endfor %}
+        </main>
+
+         <main class="trashopt2" style="align-items: center; justify-content: center; display: none;">
+            <p> Deleted Items Will Appear Here And Will Be Deleted In 7 Day </p>
+            <p style="opacity: 0.7;"> <i class="fa-solid fa-trash" style="width:70px; height: 70px;"></i> </p>
+        </main>
+
+
+        <main class="Remainder" style="display:none;">
+            {% for ic3 in datas %}
+                {% if ic3.NUMBER==3 %} 
+                    <div class="text121"  >
+                        <td>
+                            <tr>
+                                <h2 class="headings">
+                                    {{ic3.TITLE}}
+                                </h2>
+                            </tr>
+                        </td>
+                        <td>
+                            <tr>
+                                <p>
+                                    {{ic3.CONTENT}}
+                                </p>
+                                <p style="display: none;">{{ic3.ID}}</p>
+                            </tr>
+                            <div style="display:flex; flex-direction: row ; justify-content: space-between;">
+                                <p style=" color: grey;">|{{ic3.CREATED}}|</p>
+                                
+                                <input type="checkbox" name="" class="checkbox">
+                                
+                            </div>
+                        </td>
+                        <center>
+                        
+                        </center>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+        </main>
+
+
+         <main class="Remainderopt2" style="align-items: center; justify-content: center; display: none;">
+            <p> Remainders Will Appear Here </p>
+            <p style="opacity: 0.7;"> <i class="fa-solid fa-bell" style="width:70px; height: 70px;"></i> </p>
+        </main>
+
+
+        <div class="maximize" style="z-index: 13 !important ; display: none; align-items: center; justify-content: center; position: fixed; "></div>
+        <center>
+            <div class="maximize-window" style="z-index:22;">
+                <button class="minimize" onclick="min()"><i class="fa-solid fa-down-left-and-up-right-to-center"></i></button>
+                <center>
+                    <h2 class="maxpophead"> </h2>
+                </center>
+                    <p class="maxpopp">
+                        
+                    </p>
+                
+                <!-- <center>
+                    <img src="{{datas.IMAGE}}" alt="image" style="width:250px; height: 250px; margin-top:20px; " class="max-image" >
+                </center> -->
+            </div>
+        </center>
+
+
+
+        <div class="popup" id="pop" style="position: fixed;"></div>
+            <div class="frm" id="form"> 
+                <form  method="post" action="" enctype="multipart/form-data"> 
+                    <input type="text " placeholder="Title" class ="btitle" required name="title"> 
+                    <textarea placeholder="Take A Note"  id="desc" class="cont" name="content"></textarea>
+                    <button  class="save" type="submit">save</button>
+                    <input type="file" id="fileInput" style="display: none;" class="f2" accept="image/*" name="image12">
+                    <button id="imginp" class="f12" type="none"> <i class="fa-solid fa-image" ></i> </button>
+                    <button class="archbtn"> <i class="fa-solid fa-box-archive"></i> </button>
+                    <button class="trashbtn"> <i class="fa-solid fa-trash"></i> </button>
+                    <button class="new-folder-button"><i class="fa-solid fa-folder-plus"></i></button>
+                    <button id="cancel" class="cl" type="button" > cancel</button>
+                
+                    
+                </form>
+            </div>
+        <script src="{{url_for('static',filename='script.js')}}"></script> 
+    </body>
+</html>
